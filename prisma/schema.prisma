@@ -1,0 +1,112 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Post {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  updatedAt DateTime
+  title     String   @db.VarChar(255)
+  content   String?
+  published Boolean  @default(false)
+  authorId  String
+  User      User     @relation(fields: [authorId], references: [id])
+
+  @@index([authorId], map: "Post_authorId_fkey")
+}
+
+model Profile {
+  id     String  @id @default(uuid())
+  bio    String?
+  userId String  @unique
+  User   User    @relation(fields: [userId], references: [id])
+}
+
+model User {
+  id      String   @id @default(uuid())
+  email   String   @unique
+  name    String?
+  Post    Post[]
+  Profile Profile?
+}
+
+model Poem {
+  id         String          @id @default(uuid())
+  createdAt  DateTime?       @default(now())
+  updatedAt  DateTime?       @updatedAt
+  title      String          @db.VarChar(255)
+  content    String?         @db.Text
+  image      String?
+  scripture  String?
+  author     String?         @default("Emmanuel I. Emodiae")
+  categories PoemCategories? @relation(fields: [categoryId], references: [id])
+  categoryId String?
+}
+
+model Article {
+  id        String     @id @default(uuid())
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  title     String     @db.VarChar(255)
+  content   String?    @db.Text
+  image     String?
+  viewCount Int?
+  likes     Int?
+  author    String?    @default("Emmanuel I. Emodiae")
+  comments  Comment[]
+  hashTags  HashTags[]
+}
+
+model Comment {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  name      String
+  comment   String
+  article   Article  @relation(fields: [articleId], references: [id])
+  articleId String
+}
+
+model ShopItem {
+  id           String   @id @default(uuid())
+  createdAt    DateTime @default(now())
+  title        String
+  image        String
+  price        String
+  availableQty String
+  rating       String
+}
+
+model Message {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+  title     String
+  audio     String
+  preacher  String?  @default("Emmanuel I. Emodiae")
+}
+
+model PoemCategories {
+  id    String @id @default(uuid())
+  name  String
+  poems Poem[]
+}
+
+model HashTags {
+  id        String  @id @default(uuid())
+  title     String
+  articleId String
+  articles  Article @relation(fields: [articleId], references: [id])
+}
+
+model Admin {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  name      String?
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
