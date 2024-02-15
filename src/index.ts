@@ -9,7 +9,7 @@ import shopItemRouter from "./routes/shopRouter";
 const prisma = new PrismaClient();
 const app = express();
 
-const PORT = 4000 || process.env.PORT;
+const PORT =  process.env.PORT || 4000;
 
 app.use(cors());
 app.use(morgan("dev"));
