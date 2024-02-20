@@ -10,6 +10,8 @@ import { config } from "./config/config";
 const prisma = new PrismaClient();
 const app = express();
 
+const PORT =  process.env.PORT || 4000;
+
 app.use(cors());
 app.use(morgan("dev"));
 app.use(express.urlencoded({ extended: false }));
@@ -36,8 +38,8 @@ async function main() {
   });
 }
 
-app.listen(config.server.port, () => {
-  console.log(`App running on port: ${config.server.port}`);
+app.listen(PORT, () => {
+  console.log(`App running on port: ${PORT}`);
   main()
     .then(async () => {
       console.log("DB connected");

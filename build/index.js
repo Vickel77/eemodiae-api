@@ -19,9 +19,9 @@ const morgan_1 = __importDefault(require("morgan"));
 const poemRouter_1 = __importDefault(require("./routes/poemRouter"));
 const articleRouter_1 = __importDefault(require("./routes/articleRouter"));
 const shopRouter_1 = __importDefault(require("./routes/shopRouter"));
-const config_1 = require("./config/config");
 const prisma = new client_1.PrismaClient();
 const app = (0, express_1.default)();
+const PORT = process.env.PORT || 4000;
 app.use((0, cors_1.default)());
 app.use((0, morgan_1.default)("dev"));
 app.use(express_1.default.urlencoded({ extended: false }));
@@ -44,8 +44,8 @@ function main() {
         });
     });
 }
-app.listen(config_1.config.server.port, () => {
-    console.log(`App running on port: ${config_1.config.server.port}`);
+app.listen(PORT, () => {
+    console.log(`App running on port: ${PORT}`);
     main()
         .then(() => __awaiter(void 0, void 0, void 0, function* () {
         console.log("DB connected");
